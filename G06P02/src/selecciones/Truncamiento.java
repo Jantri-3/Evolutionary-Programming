@@ -8,7 +8,7 @@ import main.FitnessComparatorMin;
 
 public class Truncamiento {
 
-	public void truncamiento(AlgoritmoGenetico alg,int nseleccionados) {
+	public static void truncamiento(AlgoritmoGenetico alg,int nseleccionados) {
 
 		//PorcentajeSeleccion = 10%
 		double porcentajeSeleccion = 0.1;

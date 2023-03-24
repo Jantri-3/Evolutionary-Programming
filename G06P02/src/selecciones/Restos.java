@@ -7,7 +7,7 @@ import Funciones.Individuo;
 import main.AlgoritmoGenetico;
 
 public class Restos {
-	public void restos(AlgoritmoGenetico alg, int nseleccionados) {//Edu (el resto simplemente haz que haga un random y tire por cualquiera de los otros métodos o hazlo fijo)
+	public static void restos(AlgoritmoGenetico alg, int nseleccionados) {//Edu (el resto simplemente haz que haga un random y tire por cualquiera de los otros métodos o hazlo fijo)
 		double[] p = new double[nseleccionados];
 		List<Individuo> seleccionados = new ArrayList<>(); 
 		calculaPi(alg, nseleccionados, p);

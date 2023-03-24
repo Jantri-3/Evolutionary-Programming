@@ -7,7 +7,7 @@ import Funciones.Individuo;
 import main.AlgoritmoGenetico;
 
 public class EstocasticoUniversal {
-	public void estUniversal(AlgoritmoGenetico alg,int nseleccionados) {
+	public static void estUniversal(AlgoritmoGenetico alg,int nseleccionados) {
 		double[] puntAcum = new double[nseleccionados];
 		List<Individuo> seleccionados = new ArrayList<>();
 		double[] correctedFitness = new double[nseleccionados];
