@@ -14,7 +14,7 @@ public class IndividuoTSP extends Individuo{
 		this.rand = new Random();
 		//El recorrido del Comerciante siempre debe empezar y acabar en Madrid = _posMadrid
 		this.cromosoma[0] = _posMadrid;
-		this.cromosoma[cromosoma.length]= _posMadrid ;
+		this.cromosoma[cromosoma.length-1]= _posMadrid ;
 		int aux = 0;
 	    int[] cities = new int[26];//We create an array of 26 cities (not including Madrid)
         for (int i = 0; i < 26; i++) {

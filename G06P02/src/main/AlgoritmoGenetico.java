@@ -1,6 +1,10 @@
 package main;
 
 import Funciones.*;
+import selecciones.Ruleta;
+import selecciones.Seleccion;
+import selecciones.Torneo;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,8 +41,8 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
             this.ui=ui;
             this.firstIt=true;
             this.tamPoblacion = ui.getTam_pob();;
-            this.poblacion = new Individuo[tamPoblacion];
-            this.fitness = new double[tamPoblacion];
+            this.setPoblacion(new Individuo[tamPoblacion]);
+            this.setFitness(new double[tamPoblacion]);
             this.metodoSelec = ui.getSelec();
             this.maxGeneraciones = ui.getNum_gen();
             this.metodoCruce = ui.getCruce();
@@ -75,32 +79,32 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 	public String getElMejor() {
 		String s = "";
 		s += "Fitness: " + mejorAbsFit + " Genes: ";
-		for(int i = 0; i < poblacion[pos_mejor].getNGen(); i++) {
-			s+= "x" + i + " (" + poblacion[pos_mejor].getFenotipo(i) + ") ";
+		for(int i = 0; i < getPoblacion()[pos_mejor].getNGen(); i++) {
+			s+= "x" + i + " (" + getPoblacion()[pos_mejor].getFenotipo(i) + ") ";
 		}
 		return s;
 	}
 
     private void introduceElite() {
-    	Arrays.sort(poblacion, new FitnessComparatorMin());//antes fitness comparator sin el min
+    	Arrays.sort(getPoblacion(), new FitnessComparatorMin());//antes fitness comparator sin el min
     	for(int i = 0; i< this.tamPoblacion; i++)
-    		fitness[i] *= -1;
-    	Arrays.sort(fitness);
+    		getFitness()[i] *= -1;
+    	Arrays.sort(getFitness());
     	for(int i = 0; i< this.tamPoblacion; i++)
-    		fitness[i] *= -1;
+    		getFitness()[i] *= -1;
     	for(int i = 0; i < elite.length; i++) {
-			poblacion[tamPoblacion - 1 - i] = elite[i];
+			getPoblacion()[tamPoblacion - 1 - i] = elite[i];
 		}
     }
 	private void generaElite() {
-		Arrays.sort(poblacion, new FitnessComparatorMin());//antes fitness comparator sin el min
+		Arrays.sort(getPoblacion(), new FitnessComparatorMin());//antes fitness comparator sin el min
 		for(int i = 0; i< this.tamPoblacion; i++)
-    		fitness[i] *= -1;
-    	Arrays.sort(fitness);
+    		getFitness()[i] *= -1;
+    	Arrays.sort(getFitness());
     	for(int i = 0; i< this.tamPoblacion; i++)
-    		fitness[i] *= -1;
+    		getFitness()[i] *= -1;
     	for(int i = 0; i < elite.length; i++) {
-			elite[i] = poblacion[i];
+			elite[i] = getPoblacion()[i];
 		}	
     }
 	
@@ -108,7 +112,7 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
     	double ret = 0;
     	
     	for(int i = 0; i < this.tamPoblacion; i++) {
-    		ret += poblacion[i].getFitness(); 
+    		ret += getPoblacion()[i].getFitness(); 
     	}
     	ret /= this.tamPoblacion;
     	return ret;
@@ -116,14 +120,14 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 	
 	private void init_pob() {
 	    for(int i =0; i< this.tamPoblacion; i++){
-               poblacion[i] = new IndividuoTSP(d, prec);
+               getPoblacion()[i] = new IndividuoTSP(d, prec);
             }
 	}
 
 	private void ev_pob() {
 		for (int i = 0; i< this.tamPoblacion; i++) {
-			poblacion[i].calculaFitness();//actualiza fitness
-			fitness[i] = poblacion[i].getFitness();
+			getPoblacion()[i].calculaFitness();//actualiza fitness
+			getFitness()[i] = getPoblacion()[i].getFitness();
 		}
 		//calcula el mejor dependiendo de si es maximizacion o minimizacion
 		if (this.firstIt && getMinFit()< mejorFit) {
@@ -135,13 +139,13 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 	public Individuo[] seleccion() {
 		switch (this.metodoSelec) { 
 	    case "Ruleta":
-	    	ruleta(tamPoblacion);
+	    	Ruleta.ruleta(this,tamPoblacion);
 	    	break;
 	    case "Torneo det.":
-	    	torneoDet(tamPoblacion);
+	    	Torneo.deterministico(tamPoblacion);
 	    	break;
 	    case "Torneo prob.":
-		    torneoProb(tamPoblacion);
+		    Torneo.probabilistico(tamPoblacion);
 		    break;
 	    case "Estocástico universal":
 	    	estUniversal(tamPoblacion);
@@ -153,11 +157,11 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 	    	restos(tamPoblacion);
 		    break;
 	  }
-		return poblacion;
+		return getPoblacion();
 	}
 	
 	public void cruce() {
-		if (poblacion[0].getTamTotal()>1) {
+		if (getPoblacion()[0].getTamTotal()>1) {
 			switch (this.metodoCruce) { 
 			 case "Pmx":
 		    	pmx();
@@ -277,115 +281,9 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 	}
 
 
-	@Override
-	public void ruleta(int nseleccionados) {
-		double[] puntAcum = new double[nseleccionados];
-		List<Individuo> seleccionados = new ArrayList<>();
-		double[] correctedFitness = new double[nseleccionados];
-		
-		//corregimos el uso del fitness;
-		double maxim = getMaxFit();
-		corrigeMinimizar(maxim, correctedFitness);	
-
-		//Primero, sumamos todas las puntuaciones de los individuos en la población para obtener un una lista de valores acumulados.
-		puntAcum[0] = correctedFitness[0];
-        for (int i = 1; i < nseleccionados; i++) {
-            puntAcum[i] = correctedFitness[i] + puntAcum[i-1];
-        }
-		//despues generamos el valor aleatorio;
-		double valorAleatorio;
-
-		for(int i = 0 ; i < nseleccionados; i++){
-			valorAleatorio = Math.random() * puntAcum[nseleccionados-1];
-			int j = 0;
-			while(j < nseleccionados && puntAcum[j] <= valorAleatorio){
-				j++;
-			}
-			
-			seleccionados.add(poblacion[j].clonar());
-		}
-		
-		for (int i = 0; i < nseleccionados; i++) {
-			poblacion[i] = seleccionados.get(i);
-			fitness[i]= poblacion[i].getFitness();
-		}
-
-	}
-
-	@Override
-	public void torneoDet(int nseleccionados) {//Edu
-		List<Individuo> seleccionados = new ArrayList<>();
-		int i1, i2, i3;
-
-		for (int i = 0; i < nseleccionados; i++) {//se generan tantos ganadores como poblacion se necesita
-			//se generan 3 indices aleatorios de la poblacion
-			Random r1 = new Random();
-			i1 = Math.abs(r1.nextInt()) % nseleccionados;
-			Random r2 = new Random();
-			i2 = Math.abs(r2.nextInt()) % nseleccionados;
-			Random r3 = new Random();
-			i3 = Math.abs(r3.nextInt()) % nseleccionados;
-			
-			selecMin(seleccionados, i1, i2, i3);
-
-		}
-		//se sobreescribe poblacion[] con los seleccionados
- 		for (int i = 0; i < seleccionados.size(); ++i) {
- 			poblacion[i] = seleccionados.get(i).clonar();
- 			fitness[i]=poblacion[i].getFitness();
- 		}
-	}
-
-	@Override
-	public void torneoProb(int nseleccionados) {//Edu
-		List<Individuo> seleccionados = new ArrayList<>();
-		int i1, i2, i3;
-		double ganador;
-		Random r = new Random();
-
-		for (int i = 0; i < nseleccionados; i++) {//se generan tantos ganadores como poblacion se necesita
-			//se generan 3 indices aleatorios de la poblacion
-			Random r1 = new Random();
-			i1 = Math.abs(r1.nextInt()) % nseleccionados;
-			Random r2 = new Random();
-			i2 = Math.abs(r2.nextInt()) % nseleccionados;
-			Random r3 = new Random();
-			i3 = Math.abs(r3.nextInt()) % nseleccionados;
-			
-			ganador = r.nextDouble();
-			
-			if (ganador >0.6)
-				selecMax(seleccionados, i1, i2, i3);
-			else
-				selecMin(seleccionados, i1, i2, i3);
-		}
-		//se sobreescribe poblacion[] con los seleccionados
- 		for (int i = 0; i < seleccionados.size(); ++i) {
- 			poblacion[i] = seleccionados.get(i).clonar();
- 			fitness[i]=poblacion[i].getFitness();
- 		}
-	}
 	
-	private void selecMax(List<Individuo> seleccionados, int i1, int i2, int i3) {
-		if (poblacion[i1].getFitness() >= poblacion[i2].getFitness() && 
-				poblacion[i1].getFitness() >= poblacion[i3].getFitness())
-			seleccionados.add(poblacion[i1].clonar());
-		else if(poblacion[i2].getFitness() >= poblacion[i1].getFitness() &&
-					poblacion[i2].getFitness() >= poblacion[i3].getFitness())
-				seleccionados.add(poblacion[i2].clonar());
-			else
-				seleccionados.add(poblacion[i3].clonar());
-	}
-	private void selecMin(List<Individuo> seleccionados, int i1, int i2, int i3) {
-		if (poblacion[i1].getFitness() <= poblacion[i2].getFitness() && 
-				poblacion[i1].getFitness() <= poblacion[i3].getFitness())
-			seleccionados.add(poblacion[i1].clonar());
-		else if(poblacion[i2].getFitness() <= poblacion[i1].getFitness() &&
-					poblacion[i2].getFitness() <= poblacion[i3].getFitness())
-				seleccionados.add(poblacion[i2].clonar());
-			else
-				seleccionados.add(poblacion[i3].clonar());
-	}
+	
+	
 
 	@Override
 	public void estUniversal(int nseleccionados) {
@@ -411,12 +309,12 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 				j++;
 			}
 			valorAleatorio = valorAleatorio + dist ;
-			seleccionados.add(poblacion[j].clonar());
+			seleccionados.add(getPoblacion()[j].clonar());
 		}
 		
 		for (int i = 0; i < nseleccionados; i++) {
-			poblacion[i] = seleccionados.get(i);
-			fitness[i]=poblacion[i].getFitness();
+			getPoblacion()[i] = seleccionados.get(i);
+			getFitness()[i]=getPoblacion()[i].getFitness();
 		}
 
     }
@@ -434,20 +332,20 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 		int numSeleccionados = (int) (nseleccionados * porcentajeSeleccion);//Los X mejores
 		
 		//Luego, creamos una copia ordenada de la población original en orden decreciente de puntuación.
-		Arrays.sort(poblacion, new FitnessComparatorMin()); 
+		Arrays.sort(getPoblacion(), new FitnessComparatorMin()); 
 			
 		
        
 		//A continuación, seleccionamos los numSeleccionados primeros individuos de la población ordenada y los devolvemos como los seleccionados.
         Individuo[] seleccionados = new Individuo[numSeleccionados];
         for(int i = 0; i< numSeleccionados; i++) {
-        	seleccionados[i]= poblacion[i].clonar();
+        	seleccionados[i]= getPoblacion()[i].clonar();
         }
 		//Finalmente igualamos la población antigua a la de individuos seleccionados
         int j = 0;
         for(int i = seleccionados.length; i < nseleccionados; i++) {
-        	poblacion[i]= seleccionados[j].clonar();//Clonamos otra vez!!!
-        	fitness[i] = poblacion[i].getFitness();
+        	getPoblacion()[i]= seleccionados[j].clonar();//Clonamos otra vez!!!
+        	getFitness()[i] = getPoblacion()[i].getFitness();
         	j++;
         	j%=numSeleccionados;
         }
@@ -478,7 +376,7 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 		for(int i = 0; i < nseleccionados; ++i) {
 			int pik = (int)(p[i] * nseleccionados);
 			if (pik > 0) 
-				seleccionados.add(poblacion[i].clonar());
+				seleccionados.add(getPoblacion()[i].clonar());
 		}
 		int nRestos = nseleccionados-seleccionados.size();
 		if (seleccionados.size() < nseleccionados) {
@@ -486,47 +384,47 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 		}
 		
 		for (int i = nRestos; i < seleccionados.size(); i++) {
-			poblacion[i] = seleccionados.get(i);
-			fitness[i]=poblacion[i].getFitness();
+			getPoblacion()[i] = seleccionados.get(i);
+			getFitness()[i]=getPoblacion()[i].getFitness();
 		}
 	}
 
 	private void calculaPi(int nseleccionados, double[] p) {
 		double sumFitness = 0;
 		for(int i=0; i < nseleccionados; i++) {
-			sumFitness += poblacion[i].getFitness();
+			sumFitness += getPoblacion()[i].getFitness();
 		}
 		
 		for(int i=0; i < nseleccionados; i++) {
-			p[i] = poblacion[i].getFitness()/sumFitness;
+			p[i] = getPoblacion()[i].getFitness()/sumFitness;
 		}
 	}
 
-	private void corrigeMinimizar(double max, double[] cf){
+	public void corrigeMinimizar(double max, double[] cf){
 		for(int i = 0; i < this.tamPoblacion; i++){
-			cf[i] = Math.abs((1.05 * max)) - this.fitness[i];
+			cf[i] = Math.abs((1.05 * max)) - this.getFitness()[i];
 		}
 	}
 
-	protected double getMaxFit(){
-		double maxim = poblacion[0].getFitness();
+	public double getMaxFit(){
+		double maxim = getPoblacion()[0].getFitness();
 		
 		for (int i = 0; i < tamPoblacion; i++) {
 
-			if (maxim < poblacion[i].getFitness()) {
-				maxim = poblacion[i].getFitness();
+			if (maxim < getPoblacion()[i].getFitness()) {
+				maxim = getPoblacion()[i].getFitness();
 			}
 			
 		}
 		return maxim;
 	}
 	protected int getMaxFitInd(){
-		double maxim = poblacion[0].getFitness();
+		double maxim = getPoblacion()[0].getFitness();
 		int ind=0;
 		for (int i = 0; i < tamPoblacion; i++) {
 
-			if (maxim < poblacion[i].getFitness()) {
-				maxim = poblacion[i].getFitness();
+			if (maxim < getPoblacion()[i].getFitness()) {
+				maxim = getPoblacion()[i].getFitness();
 				ind = i;
 			}
 			
@@ -535,18 +433,23 @@ public class AlgoritmoGenetico implements Seleccion, Cruce, Mutacion  {
 	}
 
 	protected double getMinFit(){
-		double minim = poblacion[0].getFitness();
+		double minim = getPoblacion()[0].getFitness();
 		
 		for (int i = 0; i < tamPoblacion; i++) {
 
-			if (minim > poblacion[i].getFitness()) {
-				minim = poblacion[i].getFitness();
+			if (minim > getPoblacion()[i].getFitness()) {
+				minim = getPoblacion()[i].getFitness();
 			}
 			
 		}
 		return minim;
 	}
-	
+	public Individuo[] getPoblacion() {
+		return poblacion;
+	}
 
-	
+	public double[] getFitness() {
+		return fitness;
+	}
+		
 }
