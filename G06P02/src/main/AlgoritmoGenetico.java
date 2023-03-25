@@ -154,6 +154,9 @@ public class AlgoritmoGenetico{
 	    case "Restos":
 	    	Restos.restos(this,getTamPoblacion());
 		    break;
+	    case "Ranking":
+	    	Ranking.ranking(this,getTamPoblacion());
+		    break;
 	  }
 		return getPoblacion();
 	}
