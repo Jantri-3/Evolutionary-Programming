@@ -86,27 +86,25 @@ public class AlgoritmoGenetico{
 	}
 
     private void introduceElite() {
-    	Arrays.sort(getPoblacion(), new FitnessComparatorMin());//antes fitness comparator sin el min
-    	for(int i = 0; i< this.getTamPoblacion(); i++)
-    		getFitness()[i] *= -1;
-    	Arrays.sort(getFitness());
-    	for(int i = 0; i< this.getTamPoblacion(); i++)
-    		getFitness()[i] *= -1;
+    	this.ordenaDecreciente();
     	for(int i = 0; i < elite.length; i++) {
 			getPoblacion()[getTamPoblacion() - 1 - i] = elite[i];
 		}
     }
 	private void generaElite() {
-		Arrays.sort(getPoblacion(), new FitnessComparatorMin());//antes fitness comparator sin el min
-		for(int i = 0; i< this.getTamPoblacion(); i++)
-    		getFitness()[i] *= -1;
-    	Arrays.sort(getFitness());
-    	for(int i = 0; i< this.getTamPoblacion(); i++)
-    		getFitness()[i] *= -1;
+		this.ordenaDecreciente();
     	for(int i = 0; i < elite.length; i++) {
 			elite[i] = getPoblacion()[i];
 		}	
     }
+	public void ordenaDecreciente() {
+		Arrays.sort(getPoblacion(), new FitnessComparatorMin());//antes fitness comparator sin el min
+    	for(int i = 0; i< getTamPoblacion(); i++)
+    		getFitness()[i] *= -1;
+    	Arrays.sort(getFitness());
+    	for(int i = 0; i< getTamPoblacion(); i++)
+    		getFitness()[i] *= -1;
+	}
 	
 	private double getMeanFit() {
     	double ret = 0;
@@ -231,10 +229,10 @@ public class AlgoritmoGenetico{
 			Insercion.insercion();
 			break;
 		case "Intercambio":
-			intercambio(funcion);
+			Intercambio.intercambio();
 			break;
 		case "Inversion":
-			inversion(funcion);
+			Inversion.inversion();
 			break;
 		case "heuristica":
 			heuristica(funcion);

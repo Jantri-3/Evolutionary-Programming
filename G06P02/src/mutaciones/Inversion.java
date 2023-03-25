@@ -1,7 +1,7 @@
 package mutaciones;
 
 public class Inversion {
-	public void inversion(int funcion) {
+	public void inversion() {
 		// TODO Auto-generated method stub
 		
 	}
