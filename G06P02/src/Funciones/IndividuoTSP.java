@@ -57,15 +57,15 @@ public class IndividuoTSP extends Individuo{
 	}
 	
 	@Override
-	protected double getValor() {//tomaremos como valor la distancias entre las ciudades (es un problema de minimizacion sobre distancia del recorrido)
-		double res=0;
+	protected int getValor() {//tomaremos como valor la distancias entre las ciudades (es un problema de minimizacion sobre distancia del recorrido)
+		int res=0;
 		for(int i = 0; i < (tamTotal-1); i++) {
 			res+=_DIST[this.cromosoma[i]][this.cromosoma[i+1]];
 		}
 		return res;
 	}
         @Override
-        public double getFenotipo(int i){
+        public int getFenotipo(int i){
             return cromosoma[i];
         }
         
@@ -75,7 +75,7 @@ public class IndividuoTSP extends Individuo{
     	}
     	
     	@Override
-    	public double getFitness() {
+    	public int getFitness() {
     		calculaFitness();//distinto a la prev
     		return fitness;
     	}

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public abstract class Individuo {
 	protected int[] cromosoma;
-	protected double fitness;
+	protected int fitness;
 	protected double valorError;
 	protected Random rand;
 	protected int tamTotal;
@@ -43,10 +43,10 @@ public abstract class Individuo {
 			};
 	
 	//se llama una vez para cada gen
-	protected abstract double getValor();
+	protected abstract int getValor();
 	public abstract void calculaFitness();
-	public abstract double getFitness();
-	public abstract double getFenotipo(int i);
+	public abstract int getFitness();
+	public abstract int getFenotipo(int i);
 	public abstract Individuo clonar();
 	
 	public int getNGen() {
