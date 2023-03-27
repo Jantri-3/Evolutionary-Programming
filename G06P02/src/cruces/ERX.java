@@ -1,5 +1,38 @@
 package cruces;
 
-public class ERX extends Cruce {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
+import main.AlgoritmoGenetico;
+
+public class ERX extends Cruce {
+	
+	public static void ox(AlgoritmoGenetico alg) {
+		Random rand = new Random();
+		List<Integer> indicesCruce = new ArrayList<>();
+		
+		seleccionaPadres(alg,indicesCruce, rand);
+		
+		if (indicesCruce.size() > 0) {
+	        for (int i = 0; i < indicesCruce.size()-1; i+=2) {
+	        	int[] padre1 = alg.getPoblacion()[indicesCruce.get(i)].getCrom();
+	        	int[] padre2 = alg.getPoblacion()[indicesCruce.get(i+1)].getCrom();
+	        	int[] hijo1 = new int[padre1.length];
+		        int[] hijo2 = new int[padre1.length];
+		        
+		        int[][] conectividades = new int[padre1.length][padre1.length];
+		        //Tabla de conectividades
+		        for(int j = 0; j < padre1.length; j++) {
+		        	
+		        }
+		        
+		        //Se sustituyen los padres
+				for (int j = 0; j < padre1.length; j++) {
+					alg.getPoblacion()[indicesCruce.get(i)].setCrom(j, hijo1[j]);
+					alg.getPoblacion()[indicesCruce.get(i+1)].setCrom(j, hijo2[j]);
+				}
+	        }
+		}
+	}
 }

@@ -308,5 +308,9 @@ public class AlgoritmoGenetico{
 	public double getProbCruce() {
 		return probCruce;
 	}
+	
+	public double getProbMutacion() {
+		return probMutacion;
+	}
 		
 }
