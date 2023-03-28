@@ -8,7 +8,7 @@ import main.AlgoritmoGenetico;
 
 public class ERX extends Cruce {
 	
-	public static void erx(AlgoritmoGenetico alg) {
+	public static void erx(AlgoritmoGenetico alg) {//RECOMBINACION DE RUTAS
 		Random rand = new Random();
 		List<Integer> indicesCruce = new ArrayList<>();
 		
@@ -21,10 +21,80 @@ public class ERX extends Cruce {
 	        	int[] hijo1 = new int[padre1.length];
 		        int[] hijo2 = new int[padre1.length];
 		        
-		        int[][] conectividades = new int[padre1.length][padre1.length];
+		        int[][] conectividades = new int[padre1.length][5];
 		        //Tabla de conectividades
+		        int auxrowlength [] = new int [padre1.length];
 		        for(int j = 0; j < padre1.length; j++) {
+		        	int auxrow[] = new int[5];
+		        	int y = 1;
 		        	
+		        	conectividades[0][padre1[j]] = padre1[j];
+		        	conectividades[y][padre1[j]] = padre1[j+1% padre1.length];
+		        	auxrow[y] = conectividades[y][padre1[j]];
+		        	y++;
+		        	if (j-1 < 0)
+		        		conectividades[y][padre1[j]] = padre1[padre1.length-1];
+		        	else
+		        		conectividades[y][padre1[j]] = padre1[j-1% padre1.length];
+		        	auxrow[y] = conectividades[y][padre1[j]];
+		        	y++;
+		        	int aux = getIndex(padre2, padre1[j],0,padre1.length-1);
+		        	if (!contieneSub(auxrow,padre2[aux+1%padre1.length],0,4)){
+		        			conectividades[y][padre1[j]] = padre2[aux+1% padre1.length];
+		        			auxrow[y] = conectividades[y][padre1[j]];
+		        			y++;
+		        	}
+		        	if (aux-1 < 0) {
+		        		if (!contieneSub(auxrow,padre2[padre2.length-1],0,4)){
+		        			conectividades[y][padre1[j]] = padre2[padre2.length-1];
+		        			auxrow[y] = conectividades[y][padre1[j]];
+		        			y++;
+		        		}
+		        	}
+		        	else {
+		        		if (!contieneSub(auxrow,padre2[aux-1],0,4)){
+		        			conectividades[y][padre1[j]] = padre2[aux-1];
+		        			auxrow[y] = conectividades[y][padre1[j]];
+		        			y++;
+		        		}
+		        				
+		        	}
+		        	auxrowlength[padre1[j]] = y;
+
+		        }
+		        //Se construyen los descendientes
+		        hijo1[0] = padre1[0];
+		        for(int w = 0;w < padre1.length ;w++) {
+		        	int iterador = 1;
+		        	int ciudad;
+		        	int minlength = 5;
+		        	int indice = 0;
+		        	while(iterador < auxrowlength[hijo1[w]]) {
+		        		ciudad = conectividades[iterador][hijo1[w]];
+		        		if (auxrowlength[ciudad] <= minlength) {
+		        			minlength = auxrowlength[ciudad];
+		        			indice = ciudad;
+		        		}
+		        		iterador++;
+		        	}
+		        	hijo1[w] = indice;
+		        }
+		        
+		        hijo2[0] = padre2[0];
+		        for(int w = 0;w < padre2.length ;w++) {
+		        	int iterador = 1;
+		        	int ciudad;
+		        	int minlength = 5;
+		        	int indice = 0;
+		        	while(iterador < auxrowlength[hijo2[w]]) {
+		        		ciudad = conectividades[iterador][hijo2[w]];
+		        		if (auxrowlength[ciudad] <= minlength) {
+		        			minlength = auxrowlength[ciudad];
+		        			indice = ciudad;
+		        		}
+		        		iterador++;
+		        	}
+		        	hijo2[w] = indice;
 		        }
 		        
 		        //Se sustituyen los padres

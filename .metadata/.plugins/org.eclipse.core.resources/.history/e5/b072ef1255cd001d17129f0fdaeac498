@@ -1,0 +1,81 @@
+package cruces;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import main.AlgoritmoGenetico;
+
+public class ERX extends Cruce {
+	
+	public static void erx(AlgoritmoGenetico alg) {//RECOMBINACION DE RUTAS
+		Random rand = new Random();
+		List<Integer> indicesCruce = new ArrayList<>();
+		
+		seleccionaPadres(alg,indicesCruce, rand);
+		
+		if (indicesCruce.size() > 0) {
+	        for (int i = 0; i < indicesCruce.size()-1; i+=2) {
+	        	int[] padre1 = alg.getPoblacion()[indicesCruce.get(i)].getCrom();
+	        	int[] padre2 = alg.getPoblacion()[indicesCruce.get(i+1)].getCrom();
+	        	int[] hijo1 = new int[padre1.length];
+		        int[] hijo2 = new int[padre1.length];
+		        
+		        int[][] conectividades = new int[padre1.length][5];
+		        //Tabla de conectividades
+		        int auxrowlength [] = new int [padre1.length];
+		        for(int j = 0; j < padre1.length; j++) {
+		        	int auxrow[] = new int[5];
+		        	int y = 1;
+		        	
+		        	conectividades[0][padre1[j]] = padre1[j];
+		        	conectividades[y][padre1[j]] = padre1[j+1% padre1.length];
+		        	auxrow[y] = conectividades[y][padre1[j]];
+		        	y++;
+		        	if (j-1 < 0)
+		        		conectividades[y][padre1[j]] = padre1[padre1.length-1];
+		        	else
+		        		conectividades[y][padre1[j]] = padre1[j-1% padre1.length];
+		        	auxrow[y] = conectividades[y][padre1[j]];
+		        	y++;
+		        	int aux = getIndex(padre2, padre1[j],0,padre1.length-1);
+		        	if (!contieneSub(auxrow,padre2[aux+1%padre1.length],0,4)){
+		        			conectividades[y][padre1[j]] = padre2[aux+1% padre1.length];
+		        			auxrow[y] = conectividades[y][padre1[j]];
+		        			y++;
+		        	}
+		        	if (aux-1 < 0) {
+		        		if (!contieneSub(auxrow,padre2[padre2.length-1],0,4)){
+		        			conectividades[y][padre1[j]] = padre2[padre2.length-1];
+		        			auxrow[y] = conectividades[y][padre1[j]];
+		        			y++;
+		        		}
+		        	}
+		        	else {
+		        		if (!contieneSub(auxrow,padre2[aux-1],0,4)){
+		        			conectividades[y][padre1[j]] = padre2[aux-1];
+		        			auxrow[y] = conectividades[y][padre1[j]];
+		        			y++;
+		        		}
+		        				
+		        	}
+		        	auxrowlength[padre1[j]] = y;
+
+		        }
+		        //Se construyen los descendientes
+		        for(int w = 0;w < padre2.length ;w++) {
+		        	hijo1[w] = padre2[w];
+		        	getIndex
+		        	
+		        	
+		        }
+		        
+		        //Se sustituyen los padres
+				for (int j = 0; j < padre1.length; j++) {
+					alg.getPoblacion()[indicesCruce.get(i)].setCrom(j, hijo1[j]);
+					alg.getPoblacion()[indicesCruce.get(i+1)].setCrom(j, hijo2[j]);
+				}
+	        }
+		}
+	}
+}
