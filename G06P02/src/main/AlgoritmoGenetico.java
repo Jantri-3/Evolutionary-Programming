@@ -5,11 +5,7 @@ import selecciones.*;
 import cruces.*;
 import mutaciones.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 import java.lang.Math;
 
 public class AlgoritmoGenetico{
@@ -33,8 +29,6 @@ public class AlgoritmoGenetico{
 	private double elitismo;
 	private int mejorFit;
 	private int mejorAbsFit;
-    private double prec;
-
 	
     public AlgoritmoGenetico(MainComposite ui){
             this.ui=ui;
@@ -50,7 +44,6 @@ public class AlgoritmoGenetico{
             this.probMutacion= ui.getProb_mut();
             this.elitismo = ui.getElitismo();
             this.elite = new Individuo[(int)Math.ceil(getTamPoblacion()*elitismo)];        
-            this.prec = ui.getPrec();
         }
 	public void run() {
 		init_pob();

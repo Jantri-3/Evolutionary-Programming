@@ -31,7 +31,7 @@ public class Ranking {
 				j++;
 			}
 			
-			seleccionados.add(alg.getPoblacion()[j].clonar());
+			seleccionados.add(alg.getPoblacion()[i].clonar());
 		}
 		
 		for (int i = 0; i < nseleccionados; i++) {
