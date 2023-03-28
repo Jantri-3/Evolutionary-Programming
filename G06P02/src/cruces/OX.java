@@ -21,29 +21,30 @@ public class OX extends Cruce {
 	        	int[] padre2 = alg.getPoblacion()[indicesCruce.get(i+1)].getCrom();
 	        	int[] hijo1 = new int[padre1.length];
 		        int[] hijo2 = new int[padre1.length];
-				Random rand1 = new Random();
-				int pC1 = Math.abs(rand1.nextInt())%(padre1.length);
-				Random rand2 = new Random();
-				int pC2 = Math.abs(rand2.nextInt())%(padre1.length);
+		        Random rand1 = new Random();
+				int[] is = new int[2];
+				for(int j = 0; j < is.length; j++)
+					is[j] = Math.abs(rand1.nextInt())%(padre1.length);
+				Arrays.sort(is);
 				
 				//Se copia la subcadena
-				for (int j = Math.min(pC1, pC2); j <= Math.max(pC1, pC2); j++) {
+				for (int j = is[0]; j <= is[1]; j++) {
 	                hijo1[j] = padre2[j];
 	                hijo2[j] = padre1[j];
 				}
 				//Recorrido circular desde el segundo punto de corte
-				int indH = Math.max(pC1, pC2)+1;
-				for(int j = Math.max(pC1, pC2)+1; indH != Math.min(pC1, pC2); j = (j+1)%padre1.length) {
-					if(!contieneSub(hijo1, padre1[j],pC1, pC2)) {
+				int indH = (is[1]+1)%padre1.length;
+				for(int j = (is[1]+1)%padre1.length; indH != is[0]; j = (j+1)%padre1.length) {
+					if(!contieneSub(hijo1, padre1[j],is[0], is[1])) {
 						hijo1[indH]= padre1[j];
 						indH = (indH+1)%padre1.length;
 					}
 					
 				}
 				
-				indH = Math.max(pC1, pC2)+1;
-				for(int j = Math.max(pC1, pC2)+1; indH != Math.min(pC1, pC2); j = (j+1)%padre1.length) {
-					if(!contieneSub(hijo2, padre2[j],pC1, pC2)) {
+				indH = (is[1]+1)%padre1.length;
+				for(int j = (is[1]+1)%padre1.length; indH != is[0]; j = (j+1)%padre1.length) {
+					if(!contieneSub(hijo2, padre2[j],is[0], is[1])) {
 						hijo2[indH]= padre2[j];
 						indH = (indH+1)%padre1.length;
 					}
@@ -84,8 +85,8 @@ public class OX extends Cruce {
 				}
 	             
 				//Recorrido circular desde el indice más alto
-				int indH = is[3] +1;
-				for(int j = is[3]+1; indH != is[3]; j = (j+1)%padre1.length) {
+				int indH = (is[3]+1)%padre1.length;
+				for(int j = (is[3]+1)%padre1.length; indH != is[3]; j = (j+1)%padre1.length) {
 					if(!contieneSub(is, padre1[j], 0, is.length-1)) {
 						hijo1[indH]= padre1[j];
 						indH = (indH+1)%padre1.length;
@@ -93,8 +94,8 @@ public class OX extends Cruce {
 					
 				}
 				
-				indH = is[3] +1;
-				for(int j = is[3]+1; indH != is[3]; j = (j+1)%padre1.length) {
+				indH = (is[3]+1)%padre1.length;
+				for(int j = (is[3]+1)%padre1.length; indH != is[3]; j = (j+1)%padre1.length) {
 					if(!contieneSub(is, padre2[j], 0, is.length-1)) {
 						hijo2[indH]= padre2[j];
 						indH = (indH+1)%padre2.length;
