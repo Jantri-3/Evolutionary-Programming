@@ -7,7 +7,7 @@ import Funciones.Individuo;
 import main.AlgoritmoGenetico;
 
 public class Restos {
-	public static void restos(AlgoritmoGenetico alg, int nseleccionados) {//Edu (el resto simplemente haz que haga un random y tire por cualquiera de los otros métodos o hazlo fijo)
+	public static void restos(AlgoritmoGenetico alg, int nseleccionados) {
 		double[] p = new double[nseleccionados];
 		List<Individuo> seleccionados = new ArrayList<>(); 
 		calculaPi(alg, nseleccionados, p);
@@ -31,11 +31,11 @@ public class Restos {
 	private static void calculaPi(AlgoritmoGenetico alg, int nseleccionados, double[] p) {
 		double sumFitness = 0;
 		for(int i=0; i < nseleccionados; i++) {
-			sumFitness += alg.getPoblacion()[i].getFitness();
+			sumFitness += alg.getFitness()[i];
 		}
 		
 		for(int i=0; i < nseleccionados; i++) {
-			p[i] = alg.getPoblacion()[i].getFitness()/sumFitness;
+			p[i] = alg.getFitness()[i]/sumFitness;
 		}
 	}
 }

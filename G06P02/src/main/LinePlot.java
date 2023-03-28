@@ -34,13 +34,10 @@ public class LinePlot {
 	public static void print() {
 		plot.addLegend("SOUTH");
 		// add a line plot to the PlotPanel
-		plot.addLinePlot("Mejor absoluto", generaciones, fitness);//linea roja
-		plot.addLinePlot("Mejor generacion", generaciones, maxfitness);//linea azul
-		plot.addLinePlot("Media", generaciones, meanfitness);//linea verde
-		
-		plot.getPlot(0).setColor(Color.red);
-		plot.getPlot(1).setColor(Color.blue);
-		plot.getPlot(2).setColor(Color.green);
+		plot.addLinePlot("Mejor generacion",Color.red, generaciones, fitness);//linea roja
+		plot.addLinePlot("Mejor absoluto",Color.blue, generaciones, maxfitness);//linea azul
+		plot.addLinePlot("Media",Color.green, generaciones, meanfitness);//linea verde
+
 	}
 	
 	public JPanel getPanel() {

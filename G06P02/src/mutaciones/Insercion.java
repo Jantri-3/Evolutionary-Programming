@@ -19,8 +19,15 @@ public class Insercion {
 				
 				//Se inserta el valor del índice en la pos
 				int valor = pob[i].getCrom()[is[0]];
-				for (int j = is[0]; j> is[1]; j--) {
-					pob[i].setCrom(j, pob[i].getCrom()[j-1]);
+				if (is[0] > is[1]) {
+					for (int j = is[0]; j> is[1]; j--) {
+						pob[i].setCrom(j, pob[i].getCrom()[j-1]);
+					}
+				}
+				else if (is[0] < is[1]) {
+					for (int j = is[0]; j< is[1]; j++) {
+						pob[i].setCrom(j, pob[i].getCrom()[j+1]);
+					}
 				}
 				pob[i].setCrom(is[1], valor);
 			}

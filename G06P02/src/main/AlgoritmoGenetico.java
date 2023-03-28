@@ -213,7 +213,7 @@ public class AlgoritmoGenetico{
 	
 
 	public void corrigeMinimizar(double max, double[] cf){
-		for(int i = 0; i < this.getTamPoblacion(); i++){
+		for(int i = 0; i < cf.length; i++){
 			cf[i] = Math.abs((1.05 * max)) - this.getFitness()[i];
 		}
 	}
