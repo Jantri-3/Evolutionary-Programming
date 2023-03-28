@@ -12,7 +12,7 @@ public class Heuristica {
 	public static void heuristica(AlgoritmoGenetico alg) {
 		Random rand = new Random();
 		final int N = 3;
-		Individuo[] pob = new Individuo[alg.getTamPoblacion()];
+		Individuo[] pob = alg.getPoblacion();
 		for (int i = 0; i < alg.getTamPoblacion(); i++) {
 			if (alg.getProbMutacion() <= rand.nextDouble()) {
 				

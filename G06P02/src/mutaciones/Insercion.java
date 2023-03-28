@@ -8,9 +8,9 @@ import main.AlgoritmoGenetico;
 public class Insercion {
 	public static void insercion(AlgoritmoGenetico alg) {
 		Random rand = new Random();
-		Individuo[] pob = new Individuo[alg.getTamPoblacion()];
+		Individuo[] pob = alg.getPoblacion();
 		for (int i = 0; i < alg.getTamPoblacion(); i++) {
-			if (alg.getProbMutacion() <= rand.nextDouble()) {
+			if (alg.getProbMutacion() >= rand.nextDouble()) {
 				
 				//Se obtienen un indice (is[0]) y una pos (is[1]) aleatoria
 				int[] is = new int[2];

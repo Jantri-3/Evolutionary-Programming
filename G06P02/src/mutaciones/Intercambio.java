@@ -9,7 +9,7 @@ import main.AlgoritmoGenetico;
 public class Intercambio {
 	public static void intercambio(AlgoritmoGenetico alg) {
 		Random rand = new Random();
-		Individuo[] pob = new Individuo[alg.getTamPoblacion()];
+		Individuo[] pob = alg.getPoblacion();
 		for (int i = 0; i < alg.getTamPoblacion(); i++) {
 			if (alg.getProbMutacion() <= rand.nextDouble()) {
 				

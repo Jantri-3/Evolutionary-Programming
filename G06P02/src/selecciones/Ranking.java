@@ -11,7 +11,7 @@ public class Ranking {
 	static private final double _beta = 1.5;
 	
 	public static void ranking(AlgoritmoGenetico alg, int nseleccionados) {
-		alg.ordenaDecreciente();
+		alg.ordenaCreciente();
 		
 		double[] pAcum = new double[nseleccionados];
 		List<Individuo> seleccionados = new ArrayList<>();

@@ -14,9 +14,16 @@ public class Cruce {
 			}
 		}
 	}
+	protected static boolean sonIguales(int[] padre1, int[] padre2) {
+		for (int i= 0; i< padre1.length; i++) {
+			if (padre1[i]!= padre2[i])
+				return false;
+		}
+		return true;
+	}
 	
 	protected static boolean contieneSub(int[] array, int value, int a, int b) {
-        for (int i = Math.min(a, b); i <= Math.max(a, b); i++) {
+        for (int i = a; i <= b; i++) {
             if (array[i] == value) {
                 return true;
             }
@@ -25,7 +32,7 @@ public class Cruce {
     }
     
     protected static int getIndex(int[] array, int value, int a, int b) {
-        for (int i = Math.min(a, b); i <= Math.max(a, b); i++) {
+        for (int i = a; i <= b; i++) {
             if (array[i] == value) {
                 return i;
             }

@@ -5,7 +5,6 @@ import java.util.Random;
 public abstract class Individuo {
 	protected int[] cromosoma;
 	protected int fitness;
-	protected double valorError;
 	protected Random rand;
 	protected int tamTotal;
 	protected int tamGenes;

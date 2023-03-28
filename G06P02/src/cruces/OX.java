@@ -139,8 +139,8 @@ public class OX extends Cruce {
 				
 				//Buscamos en qué posiciones están en el padre contrario
 				for(int j= 0;j< posPadre1.length;j++) {
-		             posPadre1[j] = getIndex(padre2, posPadre1[j],0, padre1.length);
-		             posPadre2[j] = getIndex(padre1, posPadre2[j],0, padre1.length);
+		             posPadre1[j] = getIndex(padre2, posPadre1[j],0, padre1.length-1);
+		             posPadre2[j] = getIndex(padre1, posPadre2[j],0, padre1.length-1);
 					}
 	            Arrays.sort(posPadre1);
 	            Arrays.sort(posPadre2);

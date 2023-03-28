@@ -29,14 +29,14 @@ public class CX extends Cruce {
 		        
 		        //Se hacen los ciclos
 		        int ind = 0;
-				while (!contieneSub(hijo1, padre2[ind], 0, padre1.length)) {
+				while (!contieneSub(hijo1, padre2[ind], 0, padre1.length-1)) {
 					hijo1[ind] = padre1[ind];
-					ind = getIndex(padre1, padre2[ind], 0, padre1.length);
+					ind = getIndex(padre1, padre2[ind], 0, padre1.length-1);
 				}
 				ind = 0;
-				while (!contieneSub(hijo2, padre1[ind], 0, padre1.length)) {
+				while (!contieneSub(hijo2, padre1[ind], 0, padre1.length-1)) {
 					hijo2[ind] = padre2[ind];
-					ind = getIndex(padre2, padre1[ind], 0, padre1.length);
+					ind = getIndex(padre2, padre1[ind], 0, padre1.length-1);
 				}
 				
 				//Los valores que faltan por poner, se copian del padre no homólogo

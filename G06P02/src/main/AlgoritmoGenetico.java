@@ -18,7 +18,7 @@ public class AlgoritmoGenetico{
 	private MainComposite ui;
 	private int tamPoblacion;
 	private Individuo[] poblacion;
-	private double[] fitness;
+	private int[] fitness;
 	private int maxGeneraciones;
     private String metodoSelec;
     private String metodoCruce;
@@ -31,18 +31,17 @@ public class AlgoritmoGenetico{
 	private int pos_mejor;
 	private Individuo[] elite;
 	private double elitismo;
-	private double mejorFit;
-	private double mejorAbsFit;
-    private int funcion;
+	private int mejorFit;
+	private int mejorAbsFit;
     private double prec;
-    private int d;
+
 	
     public AlgoritmoGenetico(MainComposite ui){
             this.ui=ui;
             this.firstIt=true;
             this.tamPoblacion = ui.getTam_pob();;
             this.poblacion=new Individuo[getTamPoblacion()];
-            this.fitness=new double[getTamPoblacion()];
+            this.fitness=new int[getTamPoblacion()];
             this.metodoSelec = ui.getSelec();
             this.maxGeneraciones = ui.getNum_gen();
             this.metodoCruce = ui.getCruce();
@@ -84,24 +83,21 @@ public class AlgoritmoGenetico{
 	}
 
     private void introduceElite() {
-    	this.ordenaDecreciente();
+    	this.ordenaCreciente();
     	for(int i = 0; i < elite.length; i++) {
 			getPoblacion()[getTamPoblacion() - 1 - i] = elite[i];
 		}
     }
 	private void generaElite() {
-		this.ordenaDecreciente();
+		this.ordenaCreciente();
     	for(int i = 0; i < elite.length; i++) {
 			elite[i] = getPoblacion()[i];
 		}	
     }
-	public void ordenaDecreciente() {
+	public void ordenaCreciente() {
 		Arrays.sort(getPoblacion(), new FitnessComparatorMin());//antes fitness comparator sin el min
-    	for(int i = 0; i< getTamPoblacion(); i++)
-    		getFitness()[i] *= -1;
     	Arrays.sort(getFitness());
-    	for(int i = 0; i< getTamPoblacion(); i++)
-    		getFitness()[i] *= -1;
+
 	}
 	
 	private double getMeanFit() {
@@ -116,7 +112,7 @@ public class AlgoritmoGenetico{
 	
 	private void init_pob() {
 	    for(int i =0; i< this.getTamPoblacion(); i++){
-               getPoblacion()[i] = new IndividuoTSP(d, prec);
+               getPoblacion()[i] = new IndividuoTSP();
             }
 	}
 
@@ -124,8 +120,8 @@ public class AlgoritmoGenetico{
 		for (int i = 0; i< this.getTamPoblacion(); i++) {
 			getFitness()[i] = getPoblacion()[i].getFitness();
 		}
-		//calcula el mejor dependiendo de si es maximizacion o minimizacion
-		if (this.firstIt && getMinFit()< mejorFit) {
+		
+		if (this.firstIt || getMinFit()< mejorFit) {
 			mejorFit = getMinFit();
 			this.firstIt=false;
 		}
@@ -248,8 +244,8 @@ public class AlgoritmoGenetico{
 		return ind;
 	}
 
-	protected double getMinFit(){
-		double minim = getPoblacion()[0].getFitness();
+	protected int getMinFit(){
+		int minim = getPoblacion()[0].getFitness();
 		
 		for (int i = 0; i < getTamPoblacion(); i++) {
 
@@ -264,7 +260,7 @@ public class AlgoritmoGenetico{
 		return poblacion;
 	}
 
-	public double[] getFitness() {
+	public int[] getFitness() {
 		return fitness;
 	}
 	public int getTamPoblacion() {
