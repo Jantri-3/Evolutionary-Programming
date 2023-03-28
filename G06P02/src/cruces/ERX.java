@@ -8,7 +8,7 @@ import main.AlgoritmoGenetico;
 
 public class ERX extends Cruce {
 	
-	public static void ox(AlgoritmoGenetico alg) {
+	public static void erx(AlgoritmoGenetico alg) {
 		Random rand = new Random();
 		List<Integer> indicesCruce = new ArrayList<>();
 		

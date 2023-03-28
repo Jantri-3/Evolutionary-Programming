@@ -50,10 +50,8 @@ public class AlgoritmoGenetico{
             this.metodoMut = ui.getMut();
             this.probMutacion= ui.getProb_mut();
             this.elitismo = ui.getElitismo();
-            this.elite = new Individuo[(int)Math.ceil(getTamPoblacion()*elitismo)];
-            this.funcion= ui.getFuncion();
+            this.elite = new Individuo[(int)Math.ceil(getTamPoblacion()*elitismo)];        
             this.prec = ui.getPrec();
-            this.d= ui.getD();
         }
 	public void run() {
 		init_pob();
@@ -124,7 +122,6 @@ public class AlgoritmoGenetico{
 
 	private void ev_pob() {
 		for (int i = 0; i< this.getTamPoblacion(); i++) {
-			getPoblacion()[i].calculaFitness();//actualiza fitness
 			getFitness()[i] = getPoblacion()[i].getFitness();
 		}
 		//calcula el mejor dependiendo de si es maximizacion o minimizacion
@@ -164,84 +161,52 @@ public class AlgoritmoGenetico{
 	public void cruce() {
 		if (getPoblacion()[0].getTamTotal()>1) {
 			switch (this.metodoCruce) { 
-			 case "Pmx":
-		    	pmx();
+			 case "PMX":
+		    	PMX.pmx(this);
 		    	break;
-			 case "Ox":
-		    	ox();
+			 case "OX":
+		    	OX.ox(this);
 		    	break;
-			 case "oxV2":
-				oxV2();
+			 case "OX_PP":
+				OX.ox_pp(this);
 				break;
-			 case "Cx":
-			    cx();
+			 case "OX_OP":
+				OX.ox_op(this);
+				break;
+			 case "CX":
+			    CX.cx(this);
 			    break;
-			 case "Erx":
-			    erx();
+			 case "ERX":
+			    ERX.erx(this);
 			    break;
-			 case "Co":
-			    co();
+			 case "CO":
+			    CO.co(this);
 			    break;
-			 case "MetodoPropio":
-				metodopropioCRUC();
+			 case "Método propio":
+				MetodoPropioCruce.metodopropiocruc(this);
 			    break;
 			
 			}
 		}
 	}
 	
-	@Override
-	public void pmx() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void ox() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void oxV2() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void cx() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void erx() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void co() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void metodopropioCRUC() {
-		// TODO Auto-generated method stub
-		
-	}
-        
+	 
     public void mutacion() {
 		switch (this.metodoMut) { 
 		case "Insercion":
-			Insercion.insercion();
+			Insercion.insercion(this);
 			break;
 		case "Intercambio":
-			Intercambio.intercambio();
+			Intercambio.intercambio(this);
 			break;
-		case "Inversion":
-			Inversion.inversion();
+		case "Inversión":
+			Inversion.inversion(this);
 			break;
-		case "heuristica":
-			heuristica(funcion);
+		case "Heurística":
+			Heuristica.heuristica(this);
 			break;
-		case "MetodoPropio":
-	    	metodopropioMUT(funcion);
+		case "Método ropio":
+	    	MetodoPropioMut.metodopropiomut(this);
 	    	break;
 		}
 	}

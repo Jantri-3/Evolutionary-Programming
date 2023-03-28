@@ -49,7 +49,7 @@ public class Heuristica {
 				//Se selecciona la mejor mutacion
 				int indMejor = 0, mejorFit = muts[indMejor].getFitness();
 				for(int j = 1; j < is.length; j++) {
-					if(muts[j].getFitness() > mejorFit) {
+					if(muts[j].getFitness() < mejorFit) {
 						mejorFit = muts[j].getFitness();
 						indMejor = j;
 					}

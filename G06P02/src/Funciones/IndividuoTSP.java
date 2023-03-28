@@ -3,7 +3,7 @@ package Funciones;
 import java.util.Random;
 
 public class IndividuoTSP extends Individuo{	
-	//(NI EL PRINCIPIO NI EL FINAL DE CROMOSOMA DEBEN DE SER MODIFICADOS EN NINGUN NMOMENTO)
+	//(NI EL PRINCIPIO NI EL FINAL DE CROMOSOMA DEBEN DE SER MODIFICADOS EN NINGUN MOMENTO)
 	//NINGUNA PARTE DEL CROMOSOMA DEBE MUTAR/CRUZARSE PARA SER MADRID
 	public IndividuoTSP(int d, double prec) {
 		this.tamGenes = 1;//Las ciudades se indican con un int del 0 al 27
@@ -59,8 +59,8 @@ public class IndividuoTSP extends Individuo{
 	@Override
 	protected int getValor() {//tomaremos como valor la distancias entre las ciudades (es un problema de minimizacion sobre distancia del recorrido)
 		int res=0;
-		for(int i = 0; i < (tamTotal-1); i++) {
-			res+=_DIST[this.cromosoma[i]][this.cromosoma[i+1]];
+		for(int i = 0; i < (tamTotal-2); i++) {
+			res+=_DIST[this.cromosoma[i+1]][this.cromosoma[i]];
 		}
 		return res;
 	}

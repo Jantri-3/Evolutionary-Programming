@@ -20,8 +20,7 @@ public class MainComposite extends javax.swing.JFrame {
     private String cruce;
     private String mut;
     private double elitismo;
-    private int d;
-    private int funcion;
+
 
     /**
      * Creates new form MainComposite
@@ -64,8 +63,6 @@ public class MainComposite extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -116,19 +113,19 @@ public class MainComposite extends javax.swing.JFrame {
         });
 
         jTextField5.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField5.setText("0.4");
+        jTextField5.setText("0.6");
 
         jTextField7.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField7.setText("0.03");
+        jTextField7.setText("0.05");
 
         jTextField8.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         jTextField8.setText("0.02");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ruleta", "Torneo det.", "Torneo prob.", "Estocástico universal", "Truncamiento", "Restos" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ruleta", "Torneo det.", "Torneo prob.", "Estocástico universal", "Truncamiento", "Restos", "Ranking"}));
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Monopunto", "Uniforme", "Aritmetico", "SBX" }));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PMX", "OX", "OX_PP", "OX_OP", "CX", "ERX", "CO", "Método propio" }));
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal" }));
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Insercion", "Intercambio", "Inversión", "Heurística", "Método propio"}));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -241,10 +238,6 @@ public class MainComposite extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Función 1 -Calibración y prueba", "Función 2 - Grie Wank", "Función 3 - Styblinski-Tang", "Función 4 - Michalewicz", "Función 5 - Michalewicz 2" }));
 
-        jLabel10.setText("Dimensiones (función  4)");
-
-        jTextField1.setText("1");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -258,9 +251,7 @@ public class MainComposite extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -270,13 +261,10 @@ public class MainComposite extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)         
                 .addGap(28, 28, 28)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        )));
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -346,9 +334,6 @@ public class MainComposite extends javax.swing.JFrame {
         selec = jComboBox2.getSelectedItem().toString();
         cruce = jComboBox3.getSelectedItem().toString();
         mut = jComboBox4.getSelectedItem().toString();
-        d = Integer.parseInt(jTextField1.getText());
-        String[] sp=  jComboBox1.getSelectedItem().toString().split(" ");
-        funcion = Integer.parseInt(sp[1]);
         lp = new LinePlot(tam_pob,num_gen);
         jPanel2.add(lp.getPanel());
         alg = new AlgoritmoGenetico(this);
@@ -401,14 +386,6 @@ public class MainComposite extends javax.swing.JFrame {
         return elitismo;
     }
 
-    public int getD() {
-        return d;
-    }
-    
-    public int getFuncion() {
-        return funcion;
-    }
-    
     /**
      * @param args the command line arguments
      */
@@ -451,7 +428,6 @@ public class MainComposite extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -471,7 +447,6 @@ public class MainComposite extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField7;
