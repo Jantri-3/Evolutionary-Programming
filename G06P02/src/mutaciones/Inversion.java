@@ -11,7 +11,7 @@ public class Inversion {
 		Random rand = new Random();
 		Individuo[] pob = alg.getPoblacion();
 		for (int i = 0; i < alg.getTamPoblacion(); i++) {
-			if (alg.getProbMutacion() <= rand.nextDouble()) {
+			if (alg.getProbMutacion() >= rand.nextDouble()) {
 				
 				//Se obtienen dos puntos de corte
 				int[] is = new int[2];
@@ -28,8 +28,10 @@ public class Inversion {
 				}
 				
 				//Se pone la subcadena en el individuo
+				indSub = 0;
 				for(int j = is[0]; j <= is[1]; j++) {
-					pob[i].setCrom(j,sub[j]);
+					pob[i].setCrom(j,sub[indSub]);
+					indSub++;
 				}
 			}
 		}

@@ -20,7 +20,6 @@ public class IndividuoTSP extends Individuo{
         		cromosoma[i] = i;
         	}  
         }
-        int j = 0;
         shuffleArray(cromosoma);//we create a permutation of that array
 	}
 	

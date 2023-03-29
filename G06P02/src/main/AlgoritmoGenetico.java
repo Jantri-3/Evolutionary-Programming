@@ -58,7 +58,7 @@ public class AlgoritmoGenetico{
 			ev_pob();
 			if(mejorFit< mejorAbsFit)
 				mejorAbsFit = mejorFit;
-			LinePlot.setCoords(i,getMaxFit());
+			LinePlot.setCoords(i,getMinFit());
 			LinePlot.setBestCoords(i, mejorAbsFit);
 			LinePlot.setMeanCoords(i, getMeanFit());
 		}
@@ -68,10 +68,7 @@ public class AlgoritmoGenetico{
 	}
 	public String getElMejor() {
 		String s = "";
-		s += "Fitness: " + mejorAbsFit + " Genes: ";
-		for(int i = 0; i < getPoblacion()[pos_mejor].getNGen(); i++) {
-			s+= "x" + i + " (" + getPoblacion()[pos_mejor].getFenotipo(i) + ") ";
-		}
+		s += "Fitness: " + mejorAbsFit;
 		return s;
 	}
 

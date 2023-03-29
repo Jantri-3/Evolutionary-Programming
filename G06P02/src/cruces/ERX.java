@@ -18,90 +18,104 @@ public class ERX extends Cruce {
 	        for (int i = 0; i < indicesCruce.size()-1; i+=2) {
 	        	int[] padre1 = alg.getPoblacion()[indicesCruce.get(i)].getCrom();
 	        	int[] padre2 = alg.getPoblacion()[indicesCruce.get(i+1)].getCrom();
-	        	int[] hijo1 = new int[padre1.length];
-		        int[] hijo2 = new int[padre1.length];
-		        
-		        int[][] conectividades = new int[padre1.length][5];
-		        //Tabla de conectividades
-		        int auxrowlength [] = new int [padre1.length];
-		        for(int j = 0; j < padre1.length; j++) {
-		        	int auxrow[] = new int[5];
-		        	int y = 1;
-		        	
-		        	conectividades[0][padre1[j]] = padre1[j];
-		        	conectividades[y][padre1[j]] = padre1[j+1% padre1.length];
-		        	auxrow[y] = conectividades[y][padre1[j]];
-		        	y++;
-		        	if (j-1 < 0)
-		        		conectividades[y][padre1[j]] = padre1[padre1.length-1];
-		        	else
-		        		conectividades[y][padre1[j]] = padre1[j-1% padre1.length];
-		        	auxrow[y] = conectividades[y][padre1[j]];
-		        	y++;
-		        	int aux = getIndex(padre2, padre1[j],0,padre1.length-1);
-		        	if (!contieneSub(auxrow,padre2[aux+1%padre1.length],0,4)){
-		        			conectividades[y][padre1[j]] = padre2[aux+1% padre1.length];
-		        			auxrow[y] = conectividades[y][padre1[j]];
-		        			y++;
-		        	}
-		        	if (aux-1 < 0) {
-		        		if (!contieneSub(auxrow,padre2[padre2.length-1],0,4)){
-		        			conectividades[y][padre1[j]] = padre2[padre2.length-1];
-		        			auxrow[y] = conectividades[y][padre1[j]];
-		        			y++;
-		        		}
-		        	}
-		        	else {
-		        		if (!contieneSub(auxrow,padre2[aux-1],0,4)){
-		        			conectividades[y][padre1[j]] = padre2[aux-1];
-		        			auxrow[y] = conectividades[y][padre1[j]];
-		        			y++;
-		        		}
-		        				
-		        	}
-		        	auxrowlength[padre1[j]] = y;
-
+		        	 if (!sonIguales(padre1,padre2)) {	
+		        	int[] hijo1 = new int[padre1.length];
+			        int[] hijo2 = new int[padre1.length];
+			        
+			        for(int j = 0; j < hijo2.length; j++) {
+			        	hijo1[j]=-1;
+			        	hijo2[j]=-1;
+			        }
+			        
+			        int[][] conectividades = new int[5][padre1.length];
+			        //Tabla de conectividades
+			        int auxrowlength [] = new int [padre1.length];
+			        for(int j = 0; j < padre1.length; j++) {
+			        	int auxrow[] = new int[5];
+			        	int y = 1;
+			        	int posPadre=padre1[j];
+			        	if (posPadre == 26)
+			        		posPadre= 24;
+			        	
+			        	conectividades[0][posPadre] = padre1[j];
+			        	conectividades[y][posPadre] = padre1[(j+1)% padre1.length];
+			        	auxrow[y] = conectividades[y][posPadre];
+			        	y++;
+			        	if (j-1 < 0)
+			        		conectividades[y][posPadre] = padre1[padre1.length-1];
+			        	else
+			        		conectividades[y][posPadre] = padre1[(j-1)% padre1.length];
+			        	auxrow[y] = conectividades[y][posPadre];
+			        	y++;
+			        	int aux = getIndex(padre2, padre1[j],0,padre1.length-1);
+			        	if (!contieneSub(auxrow,padre2[(aux+1)%padre1.length],0,4)){
+			        			conectividades[y][posPadre] = padre2[(aux+1)% padre1.length];
+			        			auxrow[y] = conectividades[y][posPadre];
+			        			y++;
+			        	}
+			        	if (aux-1 < 0) {
+			        		if (!contieneSub(auxrow,padre2[padre2.length-1],0,4)){
+			        			conectividades[y][posPadre] = padre2[padre2.length-1];
+			        			auxrow[y] = conectividades[y][posPadre];
+			        			y++;
+			        		}
+			        	}
+			        	else {
+			        		if (!contieneSub(auxrow,padre2[aux-1],0,4)){
+			        			conectividades[y][posPadre] = padre2[aux-1];
+			        			auxrow[y] = conectividades[y][posPadre];
+			        			y++;
+			        		}
+			        				
+			        	}
+			        	auxrowlength[posPadre] = y;
+	
+			        }
+			        //Se construyen los descendientes
+			        hijo1[0] = padre1[0];
+			        for(int w = 0;w < padre1.length ;w++) {
+			        	int iterador = 1;
+			        	int ciudad;
+			        	int minlength = 5;
+			        	int indice = 0;
+			        	while(iterador < auxrowlength[hijo1[w]]) {
+			        		ciudad = conectividades[iterador][hijo1[w]];
+			        		if (ciudad == 26)
+				        		ciudad= 24;
+			        		if (auxrowlength[ciudad] <= minlength && !contieneSub(hijo1,ciudad,0,w)) {
+			        			minlength = auxrowlength[ciudad];
+			        			indice = ciudad;
+			        		}
+			        		iterador++;
+			        	}
+			        	hijo1[w] = indice;
+			        }
+			        
+			        hijo2[0] = padre2[0];
+			        for(int w = 0;w < padre2.length ;w++) {
+			        	int iterador = 1;
+			        	int ciudad;
+			        	int minlength = 5;
+			        	int indice = 0;
+			        	while(iterador < auxrowlength[hijo2[w]]) {
+			        		ciudad = conectividades[iterador][hijo2[w]];
+			        		if (ciudad == 26)
+				        		ciudad= 24;
+			        		if (auxrowlength[ciudad] <= minlength && !contieneSub(hijo2,ciudad,0,w)) {
+			        			minlength = auxrowlength[ciudad];
+			        			indice = ciudad;
+			        		}
+			        		iterador++;
+			        	}
+			        	hijo2[w] = indice;
+			        }
+			        
+			        //Se sustituyen los padres
+					for (int j = 0; j < padre1.length; j++) {
+						alg.getPoblacion()[indicesCruce.get(i)].setCrom(j, hijo1[j]);
+						alg.getPoblacion()[indicesCruce.get(i+1)].setCrom(j, hijo2[j]);
+					}
 		        }
-		        //Se construyen los descendientes
-		        hijo1[0] = padre1[0];
-		        for(int w = 0;w < padre1.length ;w++) {
-		        	int iterador = 1;
-		        	int ciudad;
-		        	int minlength = 5;
-		        	int indice = 0;
-		        	while(iterador < auxrowlength[hijo1[w]]) {
-		        		ciudad = conectividades[iterador][hijo1[w]];
-		        		if (auxrowlength[ciudad] <= minlength && !contieneSub(hijo1,ciudad,0,w)) {
-		        			minlength = auxrowlength[ciudad];
-		        			indice = ciudad;
-		        		}
-		        		iterador++;
-		        	}
-		        	hijo1[w] = indice;
-		        }
-		        
-		        hijo2[0] = padre2[0];
-		        for(int w = 0;w < padre2.length ;w++) {
-		        	int iterador = 1;
-		        	int ciudad;
-		        	int minlength = 5;
-		        	int indice = 0;
-		        	while(iterador < auxrowlength[hijo2[w]]) {
-		        		ciudad = conectividades[iterador][hijo2[w]];
-		        		if (auxrowlength[ciudad] <= minlength && !contieneSub(hijo2,ciudad,0,w)) {
-		        			minlength = auxrowlength[ciudad];
-		        			indice = ciudad;
-		        		}
-		        		iterador++;
-		        	}
-		        	hijo2[w] = indice;
-		        }
-		        
-		        //Se sustituyen los padres
-				for (int j = 0; j < padre1.length; j++) {
-					alg.getPoblacion()[indicesCruce.get(i)].setCrom(j, hijo1[j]);
-					alg.getPoblacion()[indicesCruce.get(i+1)].setCrom(j, hijo2[j]);
-				}
 	        }
 		}
 	}

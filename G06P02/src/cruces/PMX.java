@@ -22,6 +22,12 @@ public class PMX extends Cruce {
 		        if (!sonIguales(padre1,padre2)) {	
 		        	int[] hijo1 = new int[padre1.length];
 			        int[] hijo2 = new int[padre1.length];
+			        
+			        for(int j = 0; j < hijo2.length; j++) {
+			        	hijo1[j]=-1;
+			        	hijo2[j]=-1;
+			        }
+			        
 			        //Se generan 2 puntos de corte
 			        Random rand1 = new Random();
 					int[] is = new int[2];

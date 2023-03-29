@@ -10,7 +10,7 @@ public class MetodoPropioMut {
         Random rand = new Random();
         Individuo[] pob = alg.getPoblacion();
         for (int i = 0; i < alg.getTamPoblacion(); i++) {
-            if (alg.getProbMutacion() <= rand.nextDouble()) {
+            if (alg.getProbMutacion() >= rand.nextDouble()) {
                 shuffleArray(pob[i].getCrom(),rand);
             }
         }

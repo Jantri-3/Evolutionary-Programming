@@ -11,7 +11,7 @@ public class Intercambio {
 		Random rand = new Random();
 		Individuo[] pob = alg.getPoblacion();
 		for (int i = 0; i < alg.getTamPoblacion(); i++) {
-			if (alg.getProbMutacion() <= rand.nextDouble()) {
+			if (alg.getProbMutacion() >= rand.nextDouble()) {
 				
 				//Se obtienen dos indices
 				int[] is = new int[2];
