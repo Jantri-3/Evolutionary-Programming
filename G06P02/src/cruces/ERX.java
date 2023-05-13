@@ -34,8 +34,6 @@ public class ERX extends Cruce {
 			        	int auxrow[] = new int[5];
 			        	int y = 1;
 			        	int posPadre=padre1[j];
-			        	if (posPadre == 26)
-			        		posPadre= 24;
 			        	
 			        	conectividades[0][posPadre] = padre1[j];
 			        	conectividades[y][posPadre] = padre1[(j+1)% padre1.length];
@@ -80,8 +78,7 @@ public class ERX extends Cruce {
 			        	int indice = 0;
 			        	while(iterador < auxrowlength[hijo1[w]]) {
 			        		ciudad = conectividades[iterador][hijo1[w]];
-			        		if (ciudad == 26)
-				        		ciudad= 24;
+			        		
 			        		if (auxrowlength[ciudad] <= minlength && !contieneSub(hijo1,ciudad,0,w)) {
 			        			minlength = auxrowlength[ciudad];
 			        			indice = ciudad;
@@ -99,8 +96,7 @@ public class ERX extends Cruce {
 			        	int indice = 0;
 			        	while(iterador < auxrowlength[hijo2[w]]) {
 			        		ciudad = conectividades[iterador][hijo2[w]];
-			        		if (ciudad == 26)
-				        		ciudad= 24;
+			        		
 			        		if (auxrowlength[ciudad] <= minlength && !contieneSub(hijo2,ciudad,0,w)) {
 			        			minlength = auxrowlength[ciudad];
 			        			indice = ciudad;

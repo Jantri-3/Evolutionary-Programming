@@ -7,18 +7,12 @@ public class IndividuoTSP extends Individuo{
 	//NINGUNA PARTE DEL CROMOSOMA DEBE MUTAR/CRUZARSE PARA SER MADRID
 	public IndividuoTSP() {
 		this.tamGenes = 1;//Las ciudades se indican con un int del 0 al 27
-		tamTotal = 26;//Numero de ciudades que recorre sin contar Madrid al principio ni al final
+		tamTotal = 27;//Numero de ciudades que recorre sin contar Madrid al principio ni al final
 		
 		this.cromosoma = new int[tamTotal];
-		this.rand = new Random();
 
-        for (int i = 0; i < 26; i++) {
-        	if(i == _posMadrid) {
-        		cromosoma[i] = 26;
-        	}
-        	else {
-        		cromosoma[i] = i;
-        	}  
+        for (int i = 0; i < tamTotal; i++) {
+        	cromosoma[i] = i;
         }
         shuffleArray(cromosoma);//we create a permutation of that array
 	}
@@ -69,7 +63,6 @@ public class IndividuoTSP extends Individuo{
     	
     	@Override
     	public int getFitness() {
-    		calculaFitness();//distinto a la prev
     		return fitness;
     	}
 }

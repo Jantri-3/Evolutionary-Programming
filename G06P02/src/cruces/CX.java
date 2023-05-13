@@ -33,15 +33,12 @@ public class CX extends Cruce {
 					while (!contieneSub(hijo1, padre1[ind], 0, padre1.length-1)) {
 						hijo1[ind] = padre1[ind];
 						ind = getIndex(padre1, padre2[ind], 0, padre1.length-1);
-						if (ind == -1)
-							ind = 24;
-					}
+					}					
 					ind = 0;
 					while (!contieneSub(hijo2, padre2[ind], 0, padre1.length-1)) {
 						hijo2[ind] = padre2[ind];
 						ind = getIndex(padre2, padre1[ind], 0, padre1.length-1);
-						if (ind == -1)
-							ind = 24;
+						
 					}
 					
 					//Los valores que faltan por poner, se copian del padre no homólogo

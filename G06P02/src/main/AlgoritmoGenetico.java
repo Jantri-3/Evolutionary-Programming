@@ -11,7 +11,6 @@ import java.lang.Math;
 public class AlgoritmoGenetico{
 	//(NI EL PRINCIPIO NI EL FINAL DE CROMOSOMA DEBEN DE SER MODIFICADOS EN NINGUN NMOMENTO)
 	//NINGUNA PARTE DEL CROMOSOMA DEBE MUTAR/CRUZARSE PARA SER MADRID
-	private MainComposite ui;
 	private int tamPoblacion;
 	private Individuo[] poblacion;
 	private int[] fitness;
@@ -21,8 +20,11 @@ public class AlgoritmoGenetico{
 	private double probCruce;
     private String metodoMut;
 	private double probMutacion;
-	//private int tamTorneo; no usado
-	//private Individuo elMejor;
+	private Individuo elMejor;
+	private double[] parcialfitness;
+	private double[] minfitness;
+	private double[] meanfitness;
+	private double[] generaciones;
 	private boolean firstIt;
 	private int pos_mejor;
 	private Individuo[] elite;
@@ -31,7 +33,6 @@ public class AlgoritmoGenetico{
 	private int mejorAbsFit;
 	
     public AlgoritmoGenetico(MainComposite ui){
-            this.ui=ui;
             this.firstIt=true;
             this.tamPoblacion = ui.getTam_pob();;
             this.poblacion=new Individuo[getTamPoblacion()];
@@ -43,12 +44,18 @@ public class AlgoritmoGenetico{
             this.metodoMut = ui.getMut();
             this.probMutacion= ui.getProb_mut();
             this.elitismo = ui.getElitismo();
-            this.elite = new Individuo[(int)Math.ceil(getTamPoblacion()*elitismo)];        
+            this.elite = new Individuo[(int)Math.ceil(getTamPoblacion()*elitismo)];
+            this.elMejor= new IndividuoTSP();
+            this.parcialfitness = new double[maxGeneraciones];
+            this.minfitness = new double[maxGeneraciones];
+            this.generaciones = new double[maxGeneraciones];
+            this.meanfitness = new double[maxGeneraciones];
         }
 	public void run() {
 		init_pob();
 		ev_pob();
 		mejorAbsFit = mejorFit;
+		elMejor = poblacion[pos_mejor].clonar();
 		for (int i = 0; i < this.maxGeneraciones; i++) {
 			generaElite();
 			seleccion();			
@@ -56,25 +63,33 @@ public class AlgoritmoGenetico{
 			mutacion();
 			introduceElite();
 			ev_pob();
-			if(mejorFit< mejorAbsFit)
+			if(mejorFit< mejorAbsFit){
 				mejorAbsFit = mejorFit;
-			LinePlot.setCoords(i,getMinFit());
-			LinePlot.setBestCoords(i, mejorAbsFit);
-			LinePlot.setMeanCoords(i, getMeanFit());
+				elMejor = poblacion[pos_mejor].clonar();
+			}
+			generaciones[i]=i;
+			parcialfitness[i] = getMinFit();
+			minfitness[i] = mejorAbsFit;
+			meanfitness[i] = getMeanFit();
 		}
-		pos_mejor= getMaxFitInd();
+		pos_mejor= getMinFitInd();
 		
-		LinePlot.print();
+		LinePlot.print(generaciones, parcialfitness, minfitness, meanfitness);
 	}
 	public String getElMejor() {
 		String s = "";
-		s += "Fitness: " + mejorAbsFit;
+		s += "Fitness: " + mejorAbsFit + "\nRecorrido: Madrid ";
+		
+		for (int i= 0; i < elMejor.getTamTotal(); i++) {
+			s += Ciudades.values()[elMejor.getCrom()[i]]+ " ";
+		}
+		s+="Madrid.";
 		return s;
 	}
-
+	
     private void introduceElite() {
     	this.ordenaCreciente();
-    	for(int i = 0; i < elite.length; i++) {
+		for(int i = 0; i < elite.length; i++) {
 			getPoblacion()[getTamPoblacion() - 1 - i] = elite[i];
 		}
     }
@@ -107,12 +122,14 @@ public class AlgoritmoGenetico{
 	}
 
 	private void ev_pob() {
-		for (int i = 0; i< this.getTamPoblacion(); i++) {
-			getFitness()[i] = getPoblacion()[i].getFitness();
+		for (int i = 0; i< this.tamPoblacion; i++) {
+			poblacion[i].calculaFitness();
+			fitness[i] = poblacion[i].getFitness();
 		}
 		
 		if (this.firstIt || getMinFit()< mejorFit) {
 			mejorFit = getMinFit();
+			pos_mejor = getMinFitInd();
 			this.firstIt=false;
 		}
 	}
@@ -220,7 +237,7 @@ public class AlgoritmoGenetico{
 		}
 		return maxim;
 	}
-	protected int getMaxFitInd(){
+	protected int getMinFitInd(){
 		double maxim = getPoblacion()[0].getFitness();
 		int ind=0;
 		for (int i = 0; i < getTamPoblacion(); i++) {
@@ -235,7 +252,7 @@ public class AlgoritmoGenetico{
 	}
 
 	protected int getMinFit(){
-		int minim = getPoblacion()[0].getFitness();
+		int minim = poblacion[0].getFitness();
 		
 		for (int i = 0; i < getTamPoblacion(); i++) {
 
